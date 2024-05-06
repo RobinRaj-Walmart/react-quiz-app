@@ -1,3 +1,4 @@
+import { useState } from "react";
 export default function CreateQuiz({goBack, addNewUser, addQuiz}) {
     const [userName, setUserName] = useState('');
     const [quizid, setQuizid] = useState('');
