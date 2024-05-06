@@ -5,6 +5,8 @@ export default function ExistingQuiz({goBack, users, quizes}) {
     const [submit, setSubmit] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    const timeForEachQues = 10000;
+
     useEffect(()=>{
         if(submit===1) {
             console.log("moving to the next question");
@@ -16,6 +18,19 @@ export default function ExistingQuiz({goBack, users, quizes}) {
         }
     }, [submit])
 
+    useEffect(()=> { 
+      let tempIndex = currentIndex;
+      const timeoutId = setTimeout(()=>{
+        if(currentIndex===tempIndex && currentIndex<quizes[quizid].questions.length-1) {
+          setCurrentIndex(currentIndex+1);
+          console.log("currentIndex:"+currentIndex + " tempIndex: "+tempIndex);
+        }
+      }, timeForEachQues);
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }, [currentIndex, showQuiz])
+
     return (
       <>
         <div className='h-screen flex flex-col justify-center items-center'>
@@ -25,19 +40,16 @@ export default function ExistingQuiz({goBack, users, quizes}) {
           <br />
           {showQuiz && 
             (
-                
-                // quizes[quizid].questions.map((q)=>(
-                    <>
-                        <div className="flex gap-3 items-center justify-center">
-                            <div>{quizes[quizid].questions[currentIndex]}</div>
-                            <input type="text" placeholder="Enter your answer here" className="border" />
-                            <button className="border" onClick={()=>setSubmit(1)}>
-                                {currentIndex!==quizes[quizid].questions.length-1?(<div>Submit and move to next question</div>):(<div>Final Submit</div>)}
-                            </button>
-                        </div>
-                        <br />
-                    </>
-                // ))
+              <>
+                  <div className="flex gap-3 items-center justify-center">
+                      <div>{quizes[quizid].questions[currentIndex]}</div>
+                      <input type="text" placeholder="Enter your answer here" className="border" />
+                      <button className="border" onClick={()=>setSubmit(1)}>
+                          {currentIndex!==quizes[quizid].questions.length-1?(<div>Submit and move to next question</div>):(<div>Final Submit</div>)}
+                      </button>
+                  </div>
+                  <br />
+              </>
             )
           }
         </div>
